@@ -1,0 +1,28 @@
+{
+  "raw_digilocker_response": {
+    "digilocker_id": "DL-987654321",
+    "name": "Bhargav Mouli Gajjala",
+    "dob": "15-08-1998",
+    "gender": "M",
+    "eaadhaar_issued": "Y",
+    "verified_mobile": "919876543210",
+    "issued_documents": [
+      {
+        "uri": "in.gov.uidai-PAN-ABCDE1234F",
+        "name": "Permanent Account Number",
+        "type": "PANCR",
+        "status": "ISSUED"
+      }
+    ]
+  },
+  "anonymized_compliance_payload": {
+    "transaction_id": "st-twin-889102",
+    "extracted_demographics": {
+      "gender": "M",
+      "age_bracket": "25-30",
+      "has_valid_national_id": true
+    },
+    "verification_status": "VERIFIED_SUCCESS",
+    "jurisdiction": "IN"
+  }
+}
