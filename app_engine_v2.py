@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
 
     if not os.path.exists(model_path):
         raise FileNotFoundError(
-            f"❌ CRITICAL ERROR: The uncorrupted file was not found at: {model_path}\n"
+            f" CRITICAL ERROR: The uncorrupted file was not found at: {model_path}\n"
             f"Please run the Invoke-WebRequest download command completely first."
         )
 
