@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
         logits_all=False, 
         verbose=False
     )
-    print("✅ AI Core successfully loaded and listening.")
+    print("AI Core successfully loaded and listening.")
     
     yield
     print("System: Shutting down core micro-service modules...")
