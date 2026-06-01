@@ -7,7 +7,7 @@ from llama_cpp import Llama
 username = os.getlogin()
 base_downloads_path = f"C:/Users/{username}/Downloads/"
 
-print(f"⏳ System: Checking your Windows user profile Downloads directory...")
+print(f" System: Checking your Windows user profile Downloads directory...")
 
 # Check for standard name or the hidden .txt extension variation
 target_file_normal = os.path.join(base_downloads_path, "qwen2.5-1.5b-instruct-q4_k_m.gguf")
@@ -20,8 +20,8 @@ elif os.path.exists(target_file_hidden_ext):
 else:
     raise FileNotFoundError("Model file missing from physical Downloads folder container path.")
 
-print(f"🎯 Target Found! Loading: {model_path}")
-print("⏳ Initializing Qwen 1.5B Engine directly into system RAM...")
+print(f" Target Found! Loading: {model_path}")
+print(" Initializing Qwen 1.5B Engine directly into system RAM...")
 
 # Initialize the model structure straight into system RAM
 llm = Llama(
@@ -30,11 +30,11 @@ llm = Llama(
     n_threads=4,  # Utilizes 4 CPU cores for processing
     verbose=False
 )
-print("✅ AI Core successfully loaded and listening.")
+print(" AI Core successfully loaded and listening.")
 
 # 2. Pipeline processing engine (Phase 3)
 def analyze_kyc_profile(clean_demographics_text):
-    print("🧠 AI is processing the anonymized demographic payload...")
+    print(" AI is processing the anonymized demographic payload...")
     
     prompt = (
         "<|im_start|>system\n"
@@ -53,10 +53,10 @@ def analyze_kyc_profile(clean_demographics_text):
     )
     
     raw_text = output["choices"][0]["text"].strip()
-    print(f"🤖 Raw Generation: {repr(raw_text)}")
+    print(f" Raw Generation: {repr(raw_text)}")
     
-    # 🔄 EDITED: Extract ONLY the valid JSON block between the outer curly braces
-    print("🧹 Cleaning output text structural formatting via regex extractor...")
+    #  Extract ONLY the valid JSON block between the outer curly braces
+    print("Cleaning output text structural formatting via regex extractor...")
     match = re.search(r"(\{.*?\})", raw_text, re.DOTALL)
     
     if match:
@@ -65,12 +65,12 @@ def analyze_kyc_profile(clean_demographics_text):
         # Fallback if no braces were found at all
         cleaned_text = raw_text
         
-    print(f"✨ Cleaned String: {repr(cleaned_text)}")
+    print(f" Cleaned String: {repr(cleaned_text)}")
     return json.loads(cleaned_text)
 
 # 3. Decision metric formulation formula (Phase 4)
 def compute_stability_score(analysis_results):
-    print("📊 Computing Expat Stability Score...")
+    print(" Computing Expat Stability Score...")
     score = 60  
     
     is_confirmed = str(analysis_results.get("identity_confirmed")).lower() == "true"
@@ -96,6 +96,6 @@ if __name__ == "__main__":
     extracted_metrics = analyze_kyc_profile(mock_input)
     final_output_score = compute_stability_score(extracted_metrics)
     
-    print("\n🚀 --- SUTRADHARA AI ANALYSIS COMPLETE ---")
-    print(f"📋 Extracted Metrics Struct: {json.dumps(extracted_metrics, indent=2)}")
-    print(f"🎯 Computed Expat Stability Score: {final_output_score}/100")
+    print("\n --- SUTRADHARA AI ANALYSIS COMPLETE ---")
+    print(f" Extracted Metrics Struct: {json.dumps(extracted_metrics, indent=2)}")
+    print(f" Computed Expat Stability Score: {final_output_score}/100")
