@@ -1,4 +1,4 @@
-# This script serves as a private, secure, and cost-free AI micro-service that acts as the analytical brain for your platform, Sutradhara AI.
+# This script serves as a private, secure, and cost-free AI micro-service that acts as the analytical brain for our platform, Sutradhara AI.
 import json
 import os
 import re
