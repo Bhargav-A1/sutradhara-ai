@@ -1,3 +1,4 @@
+# It directly verifies how our local AI model handles text parsing, structural cleaning, and scoring calculations inside a closed terminal sandbox.
 import json
 import os
 import re
