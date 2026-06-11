@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sutradhara AI - Complete Unified Banking Suite</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
+
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="border-b border-slate-700 pb-6 mb-8 text-center">
+            <h1 class="text-4xl font-extrabold text-indigo-400 font-mono tracking-wide">SUTRADHARA AI</h1>
+            <p class="text-slate-400 mt-2">Unified Corporate Banking Platform: Analytics, Automated Receipts & Live Chat Agent</p>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md flex flex-col">
+                <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Total Inflow (Deposits)</span>
+                <span id="totalInflow" class="text-3xl font-extrabold text-emerald-400 mt-2">£0.00</span>
+            </div>
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md flex flex-col">
+                <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Total Outflow (Expenses)</span>
+                <span id="totalOutflow" class="text-3xl font-extrabold text-rose-400 mt-2">£0.00</span>
+            </div>
+            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md flex flex-col">
+                <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Net Statement Savings</span>
+                <span id="netSavings" class="text-3xl font-extrabold text-indigo-400 mt-2">£0.00</span>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="space-y-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-300 flex items-center gap-2">
+                        <span>📁</span> 1. Statement Gateway
+                    </h2>
+                    <form id="uploadForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Target Account Email</label>
+                            <input type="email" id="userEmail" required placeholder="recipient@domain.com" 
+                                   class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-600 focus:outline-none focus:border-indigo-500 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Upload File (TXT, CSV, PNG, JPG)</label>
+                            <input type="file" id="statementFile" required accept=".txt,.csv,.png,.jpg,.jpeg,.webp"
+                                   class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition">
+                            Run Statement Analysis
+                        </button>
+                    </form>
+                    <div id="statusMessage" class="mt-4 text-sm hidden text-center py-2 rounded-md bg-slate-900 border border-slate-700"></div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-300 flex items-center gap-2">
+                        <span>💱</span> Real-time Forex Exchange
+                    </h2>
+                    <form id="forexForm" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">From Currency</label>
+                                <select id="fromCurrency" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-600 text-white">
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">To Currency</label>
+                                <select id="toCurrency" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-600 text-white">
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Exchange Order Value</label>
+                            <input type="number" id="exchangeAmount" required placeholder="500.00" step="0.01"
+                                   class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-600 focus:outline-none focus:border-indigo-500 text-white">
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-700 text-xs flex justify-between text-slate-300">
+                            <span>Simulated Rate Corridor:</span>
+                            <span id="ratePreview" class="font-bold text-indigo-400">1 GBP = 105.50 INR</span>
+                        </div>
+                        <button type="submit" id="exchangeBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer transition">
+                            Book Exchange Contract
+                        </button>
+                    </form>
+                    <div id="forexStatus" class="mt-3 text-xs hidden text-center py-2 rounded bg-slate-900 font-medium"></div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-around gap-2 shadow-inner">
+                    <button onclick="toggleTimelineView('day')" id="tab-day" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white cursor-pointer transition">Day Map</button>
+                    <button onclick="toggleTimelineView('month')" id="tab-month" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300 hover:bg-slate-600 cursor-pointer transition">Month-Wise</button>
+                    <button onclick="toggleTimelineView('year')" id="tab-year" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300 hover:bg-slate-600 cursor-pointer transition">Year Summary</button>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-300 flex items-center gap-2">
+                        <span>📊</span> 2. Financial Curve Variance Chart
+                    </h2>
+                    <div class="relative h-44 w-full">
+                        <canvas id="insightsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl flex flex-col h-64">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-300 flex items-center gap-2">
+                        <span>📜</span> 3. Sutradhara Bank Account Statement Ledger
+                    </h2>
+                    <div class="flex-1 overflow-y-auto border border-slate-700 rounded-lg bg-slate-900">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-800 text-slate-300 font-bold sticky top-0 border-b border-slate-700">
+                                <tr>
+                                    <th class="p-2.5">Date</th>
+                                    <th class="p-2.5">Merchant Description</th>
+                                    <th class="p-2.5">Category</th>
+                                    <th class="p-2.5 text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="statementTableBody" class="text-slate-300 divide-y divide-slate-800">
+                                <tr>
+                                    <td colspan="4" class="p-8 text-center italic text-slate-500">
+                                        System: Awaiting file streams to compile statement account logs...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl flex flex-col h-[650px]">
+                <h2 class="text-xl font-bold mb-1 text-indigo-300 flex items-center gap-2 border-b border-slate-700 pb-3">
+                    <span>🤖</span> 4. Cohere Coral Multi-Source Agent
+                </h2>
+                <p class="text-[11px] text-slate-400 mb-2">
+                    Queries across linked account tables, currency transfer logs, internal Notion audit sheets, and Slack compliance channels simultaneously.
+                </p>
+                
+                <div id="chatHistoryBox" class="flex-1 overflow-y-auto space-y-4 p-3 bg-slate-900 border border-slate-700 rounded-lg my-2 text-xs font-sans">
+                    <div class="text-slate-500 italic text-center py-6">
+                        Provide account email address, then prompt the Coral multi-source intelligence module regarding transaction safety flags, policies, or account balances.
+                    </div>
+                </div>
+
+                <form id="chatForm" class="flex gap-2">
+                    <input type="text" id="chatMessageInput" required placeholder="Ask about statements, settlement status, or policy compliance..." 
+                           class="flex-1 px-4 py-2 text-xs rounded-lg bg-slate-900 border border-slate-600 focus:outline-none focus:border-indigo-500 text-white">
+                    <button type="submit" id="chatSendBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-xs shadow transition cursor-pointer">
+                        Send
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "http://127.0.0.1:8000";
+        let currentChart = null;
+        let globalTransactionsList = []; 
+        let chatDialogueHistoryArray = [];
+        let currentActiveTimelineScope = 'day';
+
+        const rateMatrix = {
+            "GBP_INR": 105.50, "GBP_USD": 1.27, "GBP_EUR": 1.17,
+            "USD_INR": 83.20,  "USD_EUR": 0.92, "USD_GBP": 0.79,
+            "EUR_INR": 90.40,  "EUR_USD": 1.08, "EUR_GBP": 0.85
+        };
+
+        function updateRatePreview() {
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+            const rate = from === to ? 1.0 : (rateMatrix[`${from}_${to}`] || 1.0);
+            document.getElementById('ratePreview').innerText = `1 ${from} = ${rate.toFixed(2)} ${to}`;
+            return rate;
+        }
+
+        document.getElementById('fromCurrency').addEventListener('change', updateRatePreview);
+        document.getElementById('toCurrency').addEventListener('change', updateRatePreview);
+
+        function initializeChart(labels = [], dataPoints = []) {
+            const ctx = document.getElementById('insightsChart').getContext('2d');
+            if (currentChart) { currentChart.destroy(); }
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataPoints,
+                        backgroundColor: dataPoints.map(val => val >= 0 ? '#10b981' : '#f43f5e'),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        initializeChart(['Awaiting Input Logs'], [0]);
+
+        function populateSummaryCards() {
+            let inflow = 0; let outflow = 0;
+            globalTransactionsList.forEach(tx => {
+                const val = parseFloat(tx.amount) || 0;
+                if (val >= 0) inflow += val; else outflow += Math.abs(val);
+            });
+            document.getElementById('totalInflow').innerText = `£${inflow.toFixed(2)}`;
+            document.getElementById('totalOutflow').innerText = `£${outflow.toFixed(2)}`;
+            document.getElementById('netSavings').innerText = `£${(inflow - outflow).toFixed(2)}`;
+        }
+
+        function renderRealBankStatementTable() {
+            const tbody = document.getElementById('statementTableBody');
+            if (!globalTransactionsList || globalTransactionsList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center italic text-slate-500">System: Statement empty or trace structural layout failed.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = globalTransactionsList.map(tx => {
+                const amountVal = parseFloat(tx.amount) || 0;
+                const isDeposit = amountVal >= 0;
+                return `
+                    <tr class="hover:bg-slate-800/50 transition">
+                        <td class="p-2.5 font-mono text-slate-400">${tx.date || '---'}</td>
+                        <td class="p-2.5 font-medium text-slate-200">${tx.merchant || 'Unknown'}</td>
+                        <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 border text-indigo-300">${tx.category || 'General'}</span></td>
+                        <td class="p-2.5 text-right ${isDeposit ? 'text-emerald-400' : 'text-rose-400'}">${isDeposit ? '+' : '-'}£${Math.abs(amountVal).toFixed(2)}</td>
+                    </tr>`;
+            }).join('');
+        }
+
+        function computeTimebucketAggregates() {
+            const dayMap = {}; const monthMap = {}; const yearMap = {};
+            globalTransactionsList.forEach(tx => {
+                const dateStr = tx.date || "01/01/2026"; const amount = parseFloat(tx.amount) || 0;
+                const comp = dateStr.split('/'); if (comp.length !== 3) return;
+                dayMap[dateStr] = (dayMap[dateStr] || 0) + amount;
+                monthMap[`${comp[1]}/${comp[2]}`] = (monthMap[`${comp[1]}/${comp[2]}`] || 0) + amount;
+                yearMap[comp[2]] = (yearMap[comp[2]] || 0) + amount;
+            });
+            if (currentActiveTimelineScope === 'day') return { labels: Object.keys(dayMap), values: Object.values(dayMap) };
+            if (currentActiveTimelineScope === 'month') return { labels: Object.keys(monthMap), values: Object.values(monthMap) };
+            return { labels: Object.keys(yearMap), values: Object.values(yearMap) };
+        }
+
+        function toggleTimelineView(scopeSelection) {
+            currentActiveTimelineScope = scopeSelection;
+            ['day', 'month', 'year'].forEach(s => {
+                document.getElementById(`tab-${s}`).className = s === scopeSelection ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm" : "px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300";
+            });
+            const activeBuckets = computeTimebucketAggregates();
+            initializeChart(activeBuckets.labels, activeBuckets.values);
+        }
+
+        // STATEMENT INGESTION DISPATCH RUNNER
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('userEmail').value;
+            const fileInput = document.getElementById('statementFile').files[0];
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMessage = document.getElementById('statusMessage');
+
+            const formData = new FormData();
+            formData.append("user_email", email);
+            formData.append("file", fileInput);
+            
+            submitBtn.disabled = true;
+            statusMessage.className = "mt-4 text-xs text-indigo-400 text-center block py-1 font-medium animate-pulse";
+            statusMessage.innerText = "⏳ Routing to Cohere Command Cloud Engine Core layers...";
+            statusMessage.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/v2/parse-statement`, { method: 'POST', body: formData });
+                if (!response.ok) throw new Error(`Gateway Error Status Code: ${response.status}`);
+                const data = await response.json();
+                
+                globalTransactionsList = (data.parsed_ledger && data.parsed_ledger.transactions) ? data.parsed_ledger.transactions : [];
+                
+                statusMessage.className = "mt-4 text-xs text-emerald-400 text-center block py-1 font-bold";
+                statusMessage.innerText = "🎉 Cloud data model ingestion processed and synced successfully!";
+                populateSummaryCards();
+                renderRealBankStatementTable();
+                toggleTimelineView(currentActiveTimelineScope);
+            } catch (error) {
+                statusMessage.className = "mt-4 text-xs text-rose-400 text-center block py-1 font-bold";
+                statusMessage.innerText = "❌ Pipeline Processing Failure. Handing off status checks.";
+            } finally { submitBtn.disabled = false; }
+        });
+
+        // FOREX GATEWAY DELAYED WORKER TRANSMISSION ROUTER LINK
+        document.getElementById('forexForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('userEmail').value; if (!email) { alert("Please specify Account Email address first inside Section 1."); return; }
+            const exchangeBtn = document.getElementById('exchangeBtn');
+            const forexStatus = document.getElementById('forexStatus');
+            const payload = {
+                user_email: email, from_currency: document.getElementById('fromCurrency').value,
+                to_currency: document.getElementById('toCurrency').value, amount: parseFloat(document.getElementById('exchangeAmount').value),
+                exchange_rate: updateRatePreview()
+            };
+            exchangeBtn.disabled = true;
+            forexStatus.className = "mt-2 text-xs text-indigo-400 text-center block py-1 border-slate-700 bg-slate-900";
+            forexStatus.innerText = "⚡ Requesting order signature... Dispatching confirmation receipt mail...";
+            forexStatus.classList.remove('hidden');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/v2/exchange-currency`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await response.json();
+                forexStatus.className = "mt-2 text-xs text-emerald-400 text-center block py-1 border-emerald-900 bg-slate-900";
+                forexStatus.innerHTML = `💵 Contract locked! ID: <b>${data.transaction_id}</b><br><span class="text-slate-500">Ask the Coral Agent below to trace background pipeline settlement values.</span>`;
+            } catch (error) { forexStatus.className="mt-2 text-xs text-rose-400 text-center block py-1 border-rose-900 bg-slate-900"; forexStatus.innerText = "❌ Contract gateway verification breakdown."; } finally { exchangeBtn.disabled = false; }
+        });
+
+        // COHERE CORAL CONVERSATIONAL INTEL INTERFACE THREAD ROUTER LINK
+        document.getElementById('chatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('userEmail').value; if (!email) { alert("Verify Account Email context parameter inside Section 1 first."); return; }
+            const inputElement = document.getElementById('chatMessageInput');
+            const queryText = inputElement.value.trim(); if (!queryText) return;
+            const box = document.getElementById('chatHistoryBox');
+            const btn = document.getElementById('chatSendBtn');
+
+            box.innerHTML += `<div class="text-right bg-slate-800/40 p-2 rounded border border-slate-800"><b>You:</b> ${queryText}</div>`;
+            inputElement.value = ""; box.scrollTop = box.scrollHeight; btn.disabled = true;
+            
+            const loaderDiv = document.createElement("div");
+            loaderDiv.className = "text-left text-indigo-400 italic font-mono animate-pulse";
+            loaderDiv.innerText = "Sutradhara Coral Agent is pulling records across linked channels...";
+            box.appendChild(loaderDiv);
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/v2/agent-chat`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ user_email: email, message: queryText }) 
+                });
+                const data = await response.json();
+                box.removeChild(loaderDiv);
+                
+                box.innerHTML += `
+                    <div class="text-left bg-slate-800 p-2.5 rounded border border-slate-700/60 leading-relaxed text-slate-200">
+                        <span class="text-emerald-400 font-bold block mb-1">🛡️ CORAL ENTERPRISE AGENT RESPONSE:</span>
+                        ${data.agent_response}
+                        <span class="block text-[9px] text-slate-500 mt-2 font-mono tracking-wide">Unified Datastores Scanned: ${data.source_citations_count}</span>
+                    </div>`;
+            } catch { 
+                if(box.contains(loaderDiv)) box.removeChild(loaderDiv);
+                box.innerHTML += `<div class="text-rose-400 italic text-center font-bold text-[10px] py-1">Network Exception: Failed to aggregate Cloud RAG datastreams.</div>`; 
+            }
+            finally { btn.disabled = false; box.scrollTop = box.scrollHeight; }
+        });
+
+        updateRatePreview();
+    </script>
+</body>
+</html>
